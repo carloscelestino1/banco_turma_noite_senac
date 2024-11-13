@@ -10,8 +10,8 @@ class client(models.Model):
         return self.Nome
 
 #==============================================#
-
 class Endereco(models.Model):
+    Client = models.ForeignKey(client, on_delete=models.CASCADE, related_name='enderecos') # Adicionando a ForeignKey
     CEP = models.CharField(max_length=8)
     logradouro = models.CharField(max_length=150)
     cidade = models.CharField(max_length=50)
@@ -19,6 +19,17 @@ class Endereco(models.Model):
     Pais =models.CharField(max_length=35)
 
     def __str__(self):
-        return self.CEP
+        return f"{self.logradouro}, {self.cidade} - {self.UF}"
 
 #==============================================#
+
+
+
+
+
+
+
+
+
+
+
