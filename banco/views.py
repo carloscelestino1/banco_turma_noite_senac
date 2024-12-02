@@ -293,10 +293,11 @@ def extrato_conta(request):
 
 def transacao_poupanca(request):
     cliente = request.user
-    conta = Conta.objects.filter(id_cliente=cliente,tipo_conta='Poupanca')
-    for i in conta:
+    contas = Conta.objects.filter(id_cliente=cliente,tipo_conta='Poupanca')
+    total_saldo = contas.aggregate(Sum('saldo'))['saldo__sum'] or 0
+    for i in contas:
         print(i.saldo)
-    if conta is None:
+    if contas is None:
         messages.error(request, "Nenhuma conta poupança encontrada. Por favor, crie uma antes de realizar transações.")
         return redirect('transacao_poupanca')  
 
@@ -324,7 +325,7 @@ def transacao_poupanca(request):
         form = TransacaoForm()
  #       saldo=conta.saldo
 
-    return render(request, 'clientes/poupanca.html', {'conta': conta, 'form': form, 'total_saldo': i.saldo})
+    return render(request, 'clientes/poupanca.html', {'conta': contas, 'form': form, 'total_saldo': total_saldo})
 
 
 
